@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // Permite usar sintaxis moderna de JavaScript/TypeScript
+    "target": "ES2022",
+
+    // Configuración de módulos
+    "module": "NodeNext",
+
+    // Cómo resuelve imports y módulos
+    "moduleResolution": "NodeNext",
+
+    // Permite interoperabilidad con módulos CommonJS
+    "esModuleInterop": true,
+
+    // Activa comprobaciones estrictas de TypeScript
+    "strict": true,
+
+    // Reconoce tipos globales de Node.js como process.env
+    "types": ["node"],
+
+    // Evita generar archivos .js al validar
+    "noEmit": true
+  },
+
+  // Archivos y carpetas que TypeScript debe revisar
+  "include": [
+    "tests/**/*.ts",
+    "pages/**/*.ts",
+    "data/**/*.ts",
+    "playwright.config.ts"
+  ]
+}
