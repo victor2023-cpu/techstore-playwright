@@ -1,19 +1,11 @@
 // Importamos las herramientas de Playwright.
-//
 // expect:
 // Permite hacer validaciones con espera automática.
-//
 // Locator:
 // Representa un elemento localizado en la página.
-//
 // Page:
 // Representa la pestaña actual del navegador.
-import {
-  expect,
-  Locator,
-  Page,
-} from '@playwright/test';
-
+import {expect, Locator, Page,} from '@playwright/test';
 
 export class CartPage {
 
