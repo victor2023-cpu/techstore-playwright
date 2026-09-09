@@ -1,59 +1,114 @@
-// Carga automáticamente las variables del archivo .env.
-// Ejemplo: BASE_URL, CUSTOMER_USERNAME, CUSTOMER_PASSWORD.
+// Carga automáticamente las variables definidas en .env.
 import 'dotenv/config';
 
-// Importa las herramientas necesarias para configurar Playwright.
-import { defineConfig, devices } from '@playwright/test';
+// Importamos la configuración principal de Playwright
+// y los perfiles de dispositivos/navegadores.
+import {
+  defineConfig,
+  devices,
+} from '@playwright/test';
+
 
 export default defineConfig({
 
-  // Carpeta donde se encuentran nuestros archivos *.spec.ts.
+  // ---------------------------------------------------------
+  // UBICACIÓN DE LOS TEST CASES
+  // ---------------------------------------------------------
+  //
+  // Playwright buscará los archivos .spec.ts
+  // dentro de la carpeta tests.
   testDir: './tests',
 
-  // Desactivamos el paralelismo total porque actualmente
-  // Chromium y Firefox utilizan el mismo usuario Customer
-  // y podrían modificar el mismo carrito simultáneamente.
+
+  // ---------------------------------------------------------
+  // PARALELISMO
+  // ---------------------------------------------------------
+  //
+  // Dejamos la ejecución secuencial porque TechStore
+  // comparte estado entre carrito, productos y usuarios.
   fullyParallel: false,
 
-  // Ejecutamos una prueba a la vez para evitar
-  // interferencias entre los datos de los tests.
   workers: 1,
 
-  // Mientras desarrollamos no hacemos reintentos automáticos.
-  // Si un test falla queremos detectar el problema inmediatamente.
+
+  // ---------------------------------------------------------
+  // REINTENTOS
+  // ---------------------------------------------------------
+  //
+  // Por ahora no reintentamos automáticamente.
+  // Si un test falla queremos detectar el fallo real.
   retries: 0,
 
-  // Genera un reporte HTML con los resultados.
-  //
-  // Para abrirlo:
-  // npx playwright show-report
-  reporter: 'html',
 
-  // Configuración compartida por todos los navegadores.
+  // ---------------------------------------------------------
+  // REPORTES
+  // ---------------------------------------------------------
+  //
+  // Conservamos el reporte HTML nativo de Playwright
+  // y agregamos Allure como segundo reporter.
+  reporter: [
+
+    // Reporte HTML tradicional de Playwright.
+    [
+      'html',
+      {
+        // Evita que se abra automáticamente
+        // al finalizar cada ejecución.
+        open: 'never',
+      },
+    ],
+
+    // Reporte Allure.
+    [
+      'allure-playwright',
+      {
+        // Los datos intermedios utilizados para construir
+        // el reporte se guardarán aquí.
+        resultsDir: 'allure-results',
+
+        // Incluye más detalle de hooks y acciones.
+        detail: true,
+
+        // Usa la estructura de suites de nuestros tests.
+        suiteTitle: true,
+      },
+    ],
+  ],
+
+
+  // ---------------------------------------------------------
+  // CONFIGURACIÓN GENERAL
+  // ---------------------------------------------------------
   use: {
 
-    // Lee BASE_URL desde el archivo .env.
-    //
-    // Si BASE_URL no existe, usa localhost:3000.
+    // URL base tomada del archivo .env.
     baseURL:
-      process.env.BASE_URL ?? 'http://localhost:3000',
+      process.env.BASE_URL ??
+      'http://localhost:3000',
 
-    // Conserva el trace solamente cuando falla un test.
-    // Sirve para investigar paso a paso lo ocurrido.
+
+    // Guarda trace cuando una prueba falla.
+    // Allure puede reconocer el trace generado
+    // por Playwright y adjuntarlo al reporte.
     trace: 'retain-on-failure',
 
-    // Guarda captura de pantalla cuando falla un test.
+
+    // Captura screenshot solamente cuando falla.
     screenshot: 'only-on-failure',
 
-    // Guarda video cuando falla un test.
+
+    // Conserva video cuando falla.
     video: 'retain-on-failure',
   },
 
-  // Navegadores donde ejecutaremos los tests.
+
+  // ---------------------------------------------------------
+  // NAVEGADORES
+  // ---------------------------------------------------------
   projects: [
 
+    // Google Chrome / Chromium.
     {
-      // Ejecución utilizando Chromium.
       name: 'chromium',
 
       use: {
@@ -61,15 +116,14 @@ export default defineConfig({
       },
     },
 
+
+    // Mozilla Firefox.
     {
-      // Ejecución utilizando Firefox.
       name: 'firefox',
 
       use: {
         ...devices['Desktop Firefox'],
       },
     },
-
   ],
-
 });
