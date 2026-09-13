@@ -4,18 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "test": "playwright test",
-  "test:headed": "playwright test --headed",
-  "test:ui": "playwright test --ui",
-  "test:chromium": "playwright test --project=chromium",
-  "test:firefox": "playwright test --project=firefox",
-  "test:api": "newman run \"postman/TechStore API.postman_collection.json\" -e \"postman/TechStore Local.postman_environment.json\"",
-  "allure:clean": "node -e \"require('fs').rmSync('allure-results',{recursive:true,force:true});require('fs').rmSync('allure-report',{recursive:true,force:true})\"",
-  "allure:generate": "allure generate allure-results --clean -o allure-report",
-  "allure:open": "allure open allure-report",
-  "allure:serve": "allure serve allure-results",
-  "test:allure": "npm run allure:clean && playwright test && allure generate allure-results --clean -o allure-report"
-},
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:api": "newman run \"postman/TechStore API.postman_collection.json\" -e \"postman/TechStore Local.postman_environment.json\"",
+    "allure:clean": "node -e \"require('fs').rmSync('allure-results',{recursive:true,force:true});require('fs').rmSync('allure-report',{recursive:true,force:true})\"",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "test:allure": "npm run allure:clean && playwright test && allure generate allure-results --clean -o allure-report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -26,6 +26,7 @@
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.12.0",
     "dotenv": "^17.4.2",
+    "newman": "^6.2.2",
     "typescript": "^7.0.2"
   }
 }
