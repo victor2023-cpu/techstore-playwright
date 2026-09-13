@@ -21,6 +21,16 @@ pipeline {
     // Jenkins ejecutará el pipeline en el agente disponible.
     agent any
 
+    // ==========================================================
+    // OPCIONES DEL PIPELINE
+    // ==========================================================
+    //
+    // Evita que Jenkins descargue automáticamente el repositorio,
+    // porque ya tenemos una etapa "Checkout" definida más abajo.
+    options {
+        skipDefaultCheckout(true)
+    }
+        
     // ======================================================
     // VARIABLES DE ENTORNO
     // ======================================================
