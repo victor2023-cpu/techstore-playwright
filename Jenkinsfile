@@ -79,23 +79,25 @@ pipeline {
             }
         }
 
-        // ==================================================
+
+        // ==========================================================
         // 4. VERIFICAR TECHSTORE
-        // ==================================================
+        // ==========================================================
         stage('Verificar TechStore') {
 
             steps {
 
-                // Consulta el endpoint de Health Check.
+                // Ejecuta una consulta al endpoint de salud de TechStore.
+                //
+                // Todo el comando de PowerShell se ejecuta en una sola línea
+                // para evitar problemas con los caracteres de continuación (^)
+                // de Windows CMD.
+                //
                 // Si TechStore no responde HTTP 200,
-                // Jenkins marcará el Pipeline como fallido.
+                // PowerShell devuelve código de error y Jenkins detiene el Pipeline.
                 bat '''
                     @echo off
-
-                    powershell -NoProfile -Command ^
-                    "$response = Invoke-WebRequest -UseBasicParsing -Uri '%BASE_URL%/api/health'; ^
-                    if ($response.StatusCode -ne 200) { exit 1 }; ^
-                    Write-Host 'TechStore disponible - HTTP' $response.StatusCode"
+                    powershell -NoProfile -Command "$response = Invoke-WebRequest -UseBasicParsing -Uri '%BASE_URL%/api/health'; if ($response.StatusCode -ne 200) { exit 1 }; Write-Host 'TechStore disponible - HTTP' $response.StatusCode"
                 '''
             }
         }
