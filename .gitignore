@@ -13,3 +13,7 @@ node_modules/
 # Copias de seguridad temporales
 package.backup.json
 package-lock.backup.json
+
+# Resultados generados por Allure
+allure-results/
+allure-report/
