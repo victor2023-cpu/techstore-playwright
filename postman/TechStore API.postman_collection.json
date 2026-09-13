@@ -1,0 +1,737 @@
+{
+  "info": {
+    "_postman_id": "85fd3a55-0f61-4c27-92be-863f87fc60ec",
+    "name": "TechStore API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57689907",
+    "_collection_link": "https://go.postman.co/collection/57689907-85fd3a55-0f61-4c27-92be-863f87fc60ec?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "00.1 - Health Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// HEALTH CHECK\r\n// ==========================================================\r\n\r\n// Verifica que el backend responda HTTP 200.\r\npm.test('Health responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que TechStore esté operativo.\r\npm.test('TechStore está disponible', function () {\r\n    pm.expect(body.status).to.eql('ok');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "00.2 - Desactivar Bug Hunting",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Verifica que el endpoint responda correctamente.\r\npm.test('Configuración responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Confirmamos que Bug Hunting realmente quedó desactivado.\r\npm.test('Bug Hunting está OFF', function () {\r\n    pm.expect(body.bugs).to.eql(false);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"enabled\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/config/bugs",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "config",
+            "bugs"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "00.3 - Resetear datos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// RESET DE DATOS\r\n// ==========================================================\r\n//\r\n// Verificamos que el endpoint responda correctamente.\r\npm.test('Reset responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n// Convertimos la respuesta del servidor a JSON.\r\nconst body = pm.response.json();\r\n// Confirmamos que TechStore restauró su estado inicial.\r\npm.test('Datos reiniciados correctamente', function () {\r\n    pm.expect(body.status).to.eql('reset');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/test/reset",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "test",
+            "reset"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "00.4 - Login Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// LOGIN ADMIN\r\n// ==========================================================\r\n// Verifica que el login responda correctamente.\r\npm.test('Login Admin responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que exista un token.\r\npm.test('La respuesta contiene token', function () {\r\n    pm.expect(body.token).to.be.a('string');\r\n    pm.expect(body.token).to.not.be.empty;\r\n});\r\n// Verificamos que el usuario autenticado sea Admin.\r\npm.test('El rol autenticado es admin', function () {\r\n    pm.expect(body.user.role).to.eql('admin');\r\n});\r\n// Guardamos el token para reutilizarlo\r\n// en las siguientes pruebas API.\r\npm.environment.set(\r\n    'adminToken',\r\n    body.token\r\n);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"admin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "00.5 - Login Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// LOGIN CUSTOMER\r\n// ==========================================================\r\n// Verifica que el login responda HTTP 200.\r\npm.test('Login Customer responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que exista un token.\r\npm.test('La respuesta contiene token', function () {\r\n    pm.expect(body.token).to.be.a('string');\r\n    pm.expect(body.token).to.not.be.empty;\r\n});\r\n// Confirmamos que el usuario autenticado\r\n// tenga rol Customer.\r\npm.test('El rol autenticado es customer', function () {\r\n    pm.expect(body.user.role).to.eql('customer');\r\n});\r\n// Guardamos el token dentro del Environment activo\r\n// para utilizarlo luego en pruebas de permisos.\r\npm.environment.set(\r\n    'customerToken',\r\n    body.token\r\n);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"customer\",\r\n  \"password\": \"customer123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-P01 - Crear producto válido como Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-P01 - CREAR PRODUCTO VÁLIDO COMO ADMIN\r\n// ==========================================================\r\n\r\n// Verifica que el servidor cree correctamente el producto.\r\npm.test('API-P01 - responde 201', function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que el producto creado tenga un ID.\r\npm.test('El producto creado tiene ID', function () {\r\n    pm.expect(body.id).to.be.a('number');\r\n    pm.expect(body.id).to.be.above(0);\r\n});\r\n// Validamos los datos principales del producto.\r\npm.test('Los datos del producto son correctos', function () {\r\n    pm.expect(body.name).to.eql('Producto API QA');\r\n    pm.expect(body.price).to.eql(99.99);\r\n    pm.expect(body.category).to.eql('Accesorios');\r\n    pm.expect(body.stock).to.eql(25);\r\n});\r\n// Guardamos el ID para usarlo más adelante\r\n// en las pruebas de edición y eliminación.\r\npm.environment.set(\r\n    'createdProductId',\r\n    body.id\r\n);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Producto API QA\",\r\n  \"description\": \"Producto creado automáticamente desde Postman\",\r\n  \"price\": 99.99,\r\n  \"category\": \"Accesorios\",\r\n  \"stock\": 25\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-P02 - Crear producto incompleto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-P02 - CREAR PRODUCTO INCOMPLETO\r\n// ==========================================================\r\n// El backend debe rechazar el producto\r\n// porque falta un campo obligatorio.\r\npm.test('API-P02 - responde 400', function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que exista alguna respuesta de error.\r\n//\r\n// No forzamos todavía un texto exacto,\r\n// porque primero queremos observar el contrato real del backend.\r\npm.test('La respuesta contiene información de error', function () {\r\n    pm.expect(body).to.be.an('object');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"description\": \"Producto incompleto para prueba API\",\r\n  \"price\": 49.99,\r\n  \"category\": \"Accesorios\",\r\n  \"stock\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-P03 - Customer no puede crear producto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-P03 - CUSTOMER NO PUEDE CREAR PRODUCTO\r\n// ==========================================================\r\n//\r\n// Este caso valida autorización por rol.\r\n// El usuario Customer está autenticado,\r\n// pero no tiene permisos para crear productos.\r\n\r\npm.test('API-P03 - responde 403 Forbidden', function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\n\r\n// Convertimos la respuesta a JSON\r\n// para comprobar que el servidor devuelve\r\n// una respuesta de error.\r\nconst body = pm.response.json();\r\n\r\n\r\n// Verificamos que exista información de error.\r\n// No exigimos todavía un texto exacto,\r\n// porque primero validamos el contrato real.\r\npm.test('La respuesta contiene información de error', function () {\r\n    pm.expect(body).to.be.an('object');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{customerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Producto Customer QA\",\r\n  \"description\": \"Intento de creación con rol customer\",\r\n  \"price\": 59.99,\r\n  \"category\": \"Accesorios\",\r\n  \"stock\": 10\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-P04 - Editar producto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-P04 - EDITAR PRODUCTO\r\n// ==========================================================\r\n\r\n// Verifica que la actualización responda HTTP 200.\r\npm.test('API-P04 - responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n\r\n// Verificamos que sea el producto que creamos anteriormente.\r\npm.test('Se actualiza el producto correcto', function () {\r\n    pm.expect(body.id)\r\n        .to.eql(\r\n            Number(\r\n                pm.environment.get('createdProductId')\r\n            )\r\n        );\r\n});\r\n\r\n// Verificamos que los nuevos valores hayan sido aplicados.\r\npm.test('Precio y stock fueron actualizados', function () {\r\n    pm.expect(body.price).to.eql(149.99);\r\n    pm.expect(body.stock).to.eql(40);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"price\": 149.99,\r\n  \"stock\": 40\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/products/{{createdProductId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products",
+            "{{createdProductId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-P04.1 - Verificar producto editado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-P04.1 - VERIFICAR PERSISTENCIA\r\n// ==========================================================\r\n\r\n// El producto debe seguir existiendo.\r\npm.test('Consulta responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\nconst body = pm.response.json();\r\n\r\n// Confirmamos que los cambios realizados mediante PUT\r\n// realmente quedaron almacenados en el backend.\r\npm.test('Los cambios persisten después del PUT', function () {\r\n    pm.expect(body.price).to.eql(149.99);\r\n    pm.expect(body.stock).to.eql(40);\r\n});\r\n\r\n// Confirmamos también el ID.\r\npm.test('Es el producto creado por la prueba', function () {\r\n    pm.expect(body.id)\r\n        .to.eql(\r\n            Number(\r\n                pm.environment.get('createdProductId')\r\n            )\r\n        );\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/products/{{createdProductId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products",
+            "{{createdProductId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-P05 - Eliminar producto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-P05 - ELIMINAR PRODUCTO\r\n// ==========================================================\r\n\r\n// Verifica que la eliminación responda correctamente.\r\npm.test('API-P05 - responde 204', function () {\r\n    pm.response.to.have.status(204);\r\n});\r\n\r\n\r\n// Guardamos el ID que estamos eliminando\r\n// para poder comprobarlo después.\r\npm.environment.set(\r\n    'deletedProductId',\r\n    pm.environment.get('createdProductId')\r\n);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{adminToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/products/{{createdProductId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products",
+            "{{createdProductId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-P05.1 - Verificar producto eliminado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-P05.1 - VERIFICAR ELIMINACIÓN\r\n// ==========================================================\r\n\r\n// El producto eliminado ya no debe existir.\r\npm.test('Producto eliminado devuelve 404', function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que el backend devuelva\r\n// información de error.\r\npm.test('La respuesta contiene información de error', function () {\r\n    pm.expect(body).to.be.an('object');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/products/{{deletedProductId}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products",
+            "{{deletedProductId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-S01 - Buscar productos con smart",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-S01 - BUSCAR PRODUCTOS CON \"SMART\"\r\n// ==========================================================\r\n\r\n// Verifica que la búsqueda responda correctamente.\r\npm.test('API-S01 - responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que la respuesta sea una lista.\r\npm.test('La respuesta es una lista de productos', function () {\r\n    pm.expect(body).to.be.an('array');\r\n});\r\n// Verificamos que la búsqueda encuentre resultados.\r\npm.test('La búsqueda devuelve productos', function () {\r\n    pm.expect(body.length).to.be.above(0);\r\n});\r\n// Obtenemos los nombres de todos los productos encontrados.\r\nconst nombres = body.map(function (producto) {\r\n    return producto.name;\r\n});\r\n// Verificamos que aparezcan productos relacionados\r\n// con el término \"smart\".\r\npm.test('Encuentra Smartphone X12', function () {\r\n    pm.expect(nombres).to.include('Smartphone X12');\r\n});\r\npm.test('Encuentra Smartwatch Fit 3', function () {\r\n    pm.expect(nombres).to.include('Smartwatch Fit 3');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/products?search=smart",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "smart"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-S02 - Buscar producto inexistente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-S02 - BUSCAR PRODUCTO INEXISTENTE\r\n// ==========================================================\r\n\r\n// Verifica que la búsqueda responda correctamente.\r\npm.test('API-S02 - responde 200', function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// La API debe devolver una lista.\r\npm.test('La respuesta es una lista', function () {\r\n    pm.expect(body).to.be.an('array');\r\n});\r\n// Como el término no existe,\r\n// la lista debe estar vacía.\r\npm.test('La búsqueda no devuelve resultados', function () {\r\n    pm.expect(body.length).to.eql(0);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/products?search=zzz-inexistente",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "products"
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "zzz-inexistente"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-F01 - Agregar favorito válido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-F01 - AGREGAR FAVORITO VÁLIDO\r\n// ==========================================================\r\n\r\n// Verifica que el favorito se agregue correctamente.\r\npm.test('API-F01 - responde 201', function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Verificamos que la respuesta sea una lista\r\n// o estructura válida relacionada con favoritos.\r\npm.test('La respuesta contiene datos de favoritos', function () {\r\n    pm.expect(body).to.exist;\r\n});\r\n// Guardamos el ID del producto usado\r\n// para reutilizarlo en los siguientes casos.\r\npm.environment.set(\r\n    'favoriteProductId',\r\n    2\r\n);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{customerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"productId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/favorites",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "favorites"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-F02 - No duplicar favorito",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-F02 - NO DUPLICAR FAVORITO\r\n// ==========================================================\r\n//\r\n// El producto 2 ya fue agregado a favoritos en API-F01.\r\n// Volvemos a enviarlo para comprobar que TechStore\r\n// no cree una segunda copia del mismo favorito.\r\n// La API acepta nuevamente la solicitud\r\n// y responde HTTP 201.\r\npm.test('API-F02 - responde 201', function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n// Convertimos la respuesta a JSON.\r\n// En este endpoint la respuesta es la lista de favoritos.\r\nconst body = pm.response.json();\r\n// Verificamos que la respuesta sea una lista.\r\npm.test('La respuesta es una lista de favoritos', function () {\r\n    pm.expect(body).to.be.an('array');\r\n});\r\n// Obtenemos el ID del producto que estamos probando.\r\nconst favoriteProductId = Number(\r\n    pm.environment.get('favoriteProductId')\r\n);\r\n// Buscamos cuántas veces aparece ese producto\r\n// dentro de la lista de favoritos.\r\nconst coincidencias = body.filter(function (producto) {\r\n    return producto.id === favoriteProductId;\r\n});\r\n// El mismo producto debe aparecer UNA sola vez,\r\n// aunque intentemos agregarlo nuevamente.\r\npm.test('El producto favorito no se duplica', function () {\r\n    pm.expect(coincidencias.length).to.eql(1);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{customerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"productId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/favorites",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "favorites"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-F03 - No agregar producto inexistente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ==========================================================\r\n// API-F03 - NO AGREGAR PRODUCTO INEXISTENTE\r\n// ==========================================================\r\n//\r\n// Intentamos agregar a favoritos un producto que no existe.\r\n// Con Bug Hunting desactivado, la API debe rechazarlo.\r\n// Verificamos que el servidor responda 404 Not Found.\r\npm.test('API-F03 - responde 404', function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n// Convertimos la respuesta a JSON.\r\nconst body = pm.response.json();\r\n// Comprobamos que el backend devuelva\r\n// información relacionada con el error.\r\npm.test('La respuesta contiene información de error', function () {\r\n    pm.expect(body).to.be.an('object');\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{customerToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"productId\": 99999\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/favorites",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "favorites"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
